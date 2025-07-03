@@ -14,9 +14,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'https://microlearning-bot.netlify.app', // Use env var or default to your Netlify domain
-];
+const allowedOrigins = ['https://microlearning-bot.netlify.app'];
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
