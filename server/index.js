@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  'https://your-site-name.netlify.app', // Replace with your actual Netlify domain
+  process.env.FRONTEND_URL || 'https://microlearning-bot.netlify.app', // Use env var or default to your Netlify domain
 ];
 app.use(cors({
   origin: allowedOrigins,
