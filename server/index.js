@@ -21,6 +21,10 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+
+// Handle preflight OPTIONS requests for all routes
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
