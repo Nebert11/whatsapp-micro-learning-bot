@@ -1,8 +1,12 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
 
 const router = express.Router();
+
+// Handle preflight OPTIONS for /login
+router.options('/login', cors());
 
 // Demo admin login
 router.post('/login', async (req, res) => {
