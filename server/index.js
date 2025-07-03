@@ -88,3 +88,5 @@ app.listen(PORT, () => {
   console.log(`📱 WhatsApp Bot ready for messages`);
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
 });
+
+//The end
