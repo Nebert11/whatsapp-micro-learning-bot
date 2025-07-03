@@ -14,9 +14,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = ['https://microlearning-bot.netlify.app'];
+// Temporary: Allow all origins for debugging
 app.use(cors({
-  origin: allowedOrigins,
+  origin: true, // Allow all origins
   credentials: true,
 }));
 
