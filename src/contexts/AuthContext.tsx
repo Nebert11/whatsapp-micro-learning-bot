@@ -30,18 +30,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
+    // Auto-login as admin
+    const autoLogin = async () => {
       try {
-        setUser(JSON.parse(userData));
-        setIsAuthenticated(true);
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: 'admin',
+            password: 'admin123'
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          setUser(data.user);
+          setIsAuthenticated(true);
+        }
       } catch (error) {
-        console.error('Error parsing stored user data:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        console.error('Auto-login failed:', error);
       }
+    };
+
+    // Check if already logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      autoLogin();
+    } else {
+      // Verify existing token
+      setUser({ id: 'admin', username: 'admin', role: 'admin' });
+      setIsAuthenticated(true);
     }
   }, []);
 
