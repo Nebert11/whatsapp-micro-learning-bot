@@ -23,6 +23,9 @@ app.use(cors({
 // Handle preflight OPTIONS requests for all routes
 app.options('*', cors());
 
+// Handle all OPTIONS requests for /api routes (CORS preflight)
+app.options('/api/*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
