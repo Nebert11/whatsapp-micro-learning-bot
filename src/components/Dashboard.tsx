@@ -21,6 +21,8 @@ interface BotStats {
   engagementRate: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 const Dashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState<BotStats>({
@@ -43,7 +45,7 @@ const Dashboard = () => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/bot/stats', {
+      const response = await fetch(`${API_BASE_URL}/api/bot/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -81,7 +83,7 @@ const Dashboard = () => {
     setActivityLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/bot/activity', {
+      const response = await fetch(`${API_BASE_URL}/api/bot/activity`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

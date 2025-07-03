@@ -7,6 +7,8 @@ const Analytics = () => {
   const [activity, setActivity] = useState<any>({ peakHour: null, retention: null, responseRate: null });
   const [loading, setLoading] = useState(true);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
   useEffect(() => {
     fetchAnalytics();
   }, []);
@@ -16,9 +18,9 @@ const Analytics = () => {
     try {
       const token = localStorage.getItem('token');
       const [overviewRes, topicsRes, activityRes] = await Promise.all([
-        fetch('/api/bot/analytics/overview', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('/api/bot/analytics/topics', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('/api/bot/analytics/activity', { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`${API_BASE_URL}/api/bot/analytics/overview`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_BASE_URL}/api/bot/analytics/topics`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_BASE_URL}/api/bot/analytics/activity`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
       setChartData(overviewRes.ok ? await overviewRes.json() : []);
       setTopTopics(topicsRes.ok ? await topicsRes.json() : []);

@@ -16,6 +16,8 @@ interface User {
   certificates?: Array<{ topicId?: { icon?: string; name?: string }; url?: string }>;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${API_BASE_URL}/api/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

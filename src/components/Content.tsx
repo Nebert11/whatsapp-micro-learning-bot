@@ -24,6 +24,8 @@ interface Content {
   createdAt: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 const Content = () => {
   const [content, setContent] = useState<Content[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -56,7 +58,7 @@ const Content = () => {
   const fetchContent = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/content', {
+      const response = await fetch(`${API_BASE_URL}/api/content`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -107,7 +109,7 @@ const Content = () => {
 
   const fetchTopics = async () => {
     try {
-      const response = await fetch('/api/content/topics/all');
+      const response = await fetch(`${API_BASE_URL}/api/content/topics/all`);
       
       if (response.ok) {
         const data = await response.json();
@@ -159,7 +161,7 @@ const Content = () => {
     setTopicError('');
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/content/topics', {
+      const response = await fetch(`${API_BASE_URL}/api/content/topics`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -188,7 +190,7 @@ const Content = () => {
     setContentError('');
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/content', {
+      const response = await fetch(`${API_BASE_URL}/api/content`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -474,7 +476,7 @@ const Content = () => {
                     setTopicError('');
                     try {
                       const token = localStorage.getItem('token');
-                      const response = await fetch('/api/content/topics', {
+                      const response = await fetch(`${API_BASE_URL}/api/content/topics`, {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
