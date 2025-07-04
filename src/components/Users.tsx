@@ -12,8 +12,8 @@ interface User {
   totalScore: number;
   createdAt: string;
   lastActive: string;
-  badges?: Array<{ topicId?: { icon?: string; name?: string }; awardedAt?: string }>;
-  certificates?: Array<{ topicId?: { icon?: string; name?: string }; url?: string }>;
+  badges?: Array<{ topicId?: { _id?: string; icon?: string; name?: string }; awardedAt?: string }>;
+  certificates?: Array<{ topicId?: { _id?: string; icon?: string; name?: string }; url?: string }>;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
