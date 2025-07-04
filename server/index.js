@@ -14,29 +14,30 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS configuration - must be first, before any other middleware
+const allowedOrigins = ['https://microlearning-bot.netlify.app'];
+
 app.use(cors({
-  origin: true, // Allow all origins
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Handle preflight requests explicitly
-app.options('*', cors());
-app.options('/api/*', cors());
-
-// Add explicit OPTIONS handler for all routes
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.status(200).end();
-    return;
-  }
-  next();
-});
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -66,6 +67,20 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/bot', botRoutes);
+
+// Middleware to require login for protected routes
+app.use((req, res, next) => {
+  // Allow unauthenticated access to login route
+  if (req.path === '/api/auth/login') {
+    return next();
+  }
+  // Check for authentication (example: using a session or token)
+  // This is a placeholder; replace with your actual auth logic
+  if (!req.headers.authorization) {
+    return res.status(401).json({ success: false, message: 'Authentication required' });
+  }
+  next();
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
